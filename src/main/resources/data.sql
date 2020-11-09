@@ -1,4 +1,4 @@
-INSERT INTO product(id, name, brand, price, quantity) VALUES
+INSERT INTO PRODUCT_ENTITY (id, name, brand, price, quantity) VALUES
 (1, 'Galaxy S8', 'Samsung', 40000, 2),
 (2, 'Mi8 6', 'Xiaomi', 25000, 200),
 (3, 'Redmi Note', 'Xiaomi', 18000, 150),
