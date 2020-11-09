@@ -62,8 +62,8 @@
             <input type="submit" value="Search by brand">
         </form>
         <form name="update" method="post">
-            <input type="hidden" name="leftLovers" value="y">
-            <input type="submit" value="Show leftLovers (product which quantity is less than 5)" style="width: auto;">
+            <input type="hidden" name="leftovers" value="y">
+            <input type="submit" value="Show leftovers (product which quantity is less than 5)" style="width: auto;">
         </form>
     </div>
 </body>

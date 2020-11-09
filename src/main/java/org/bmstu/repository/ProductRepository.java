@@ -25,9 +25,15 @@ public interface ProductRepository extends PagingAndSortingRepository<productEnt
      */
     List<productEntity> findByName(@Param("name") String name);
     /**
-     * request method to get a list of productEntity objects by a given name
+     * request method to get a list of productEntity objects by a given brand
      * @param brand string Product brand
      * @return List<productEntity>
      */
     List<productEntity> findByBrand(@Param("brand") String brand);
+    /**
+     * request method to get a list of productEntity objects which quantity is less than a given parameter
+     * @param quantity string Product brand
+     * @return List<productEntity>
+     */
+    List<productEntity> findByQuantityLessThan(@Param("quantity") int quantity);
 }

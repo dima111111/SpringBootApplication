@@ -25,6 +25,8 @@ public class ProductController {
      */
     private List <Product> productList = new ArrayList<>();
 
+    private static final int  leftoversQuantity = 5;
+
     /**
      * Method allows to get product list filtered by name making rest api request
      * @param request HttpServletRequest object of current request needed to make rest api request url
@@ -101,8 +103,8 @@ public class ProductController {
         if (brandFilter != null) {
             productList = getBrandFilteredProductList(brandFilter, request);
         }
-        if (request.getParameter("leftLovers") != null) {
-            productList = getLeftLoversProductList(request);
+        if (request.getParameter("leftovers") != null) {
+            productList = getLeftoversProductList(request);
         }
         model.addAttribute("products", productList);
         return "product_search";
@@ -129,14 +131,11 @@ public class ProductController {
     }
 
     /**
-     * Method allows to get product list which quantity is less then 5
+     * Method allows to get product list which quantity is less then leftoversQuantity
      * @param request HttpServletRequest object of current request needed to make rest api request url
      * @return List<Product>
      */
-    // TODO: it should be SQL: "select * from PRODUCT_ENTITY WHERE QUANTITY < 5";
-    private List<Product> getLeftLoversProductList(HttpServletRequest request) {
-        productList = getProductList(request, "products");
-        productList.removeIf(product -> product.getQuantity() >= 5);
-        return productList;
+    private List<Product> getLeftoversProductList(HttpServletRequest request) {
+        return getProductList(request, "/products/search/findByQuantityLessThan?quantity=" + leftoversQuantity);
     }
 }
