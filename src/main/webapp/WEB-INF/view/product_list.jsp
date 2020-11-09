@@ -16,42 +16,41 @@
         <a href="/">Info</a>
         <nav>
             <ul>
-                <li><a href="<c:url value="/product_list"/>">Product List</a></li>
-                <li><a href="<c:url value="/search"/>">Search</a></li>
+                <li><a href="/product_list">Product List</a></li>
+                <li><a href="/search">Search</a></li>
             </ul>
         </nav>
     </div>
 </header>
 <body>
-<div class="container">
-<h1>Product List</h1>
-<br/><br/>
-    <c:if test="${not empty products}">
-    <table class="product_table">
-        <tr>
-            <th>Name</th>
-            <th>Brand</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th></th>
-        </tr>
-        <c:forEach  items="${products}" var ="product">
-            <tr type="element" id="${product.id}">
-                <td><a href="/product_detail/${product.id}" type="product_name">${product.name}</a></td>
-                <td>${product.brand}</td>
-                <td>${product.price}</td>
-                <td>${product.quantity}</td>
-                <td><img type="remove_button" src="<c:url value="/img/remove_button.png"/>"  element-id="${product.id}" alt="Remove product"></td>
-            </tr>
-        </c:forEach>
-    </table>
-    </c:if>
-    <c:if test="${empty products}">
-        <b>Product List is emprty.</b>
-    </c:if>
-    <a href="<c:url value="/add_product"/>" alt="Add new product">
-        <img type="add_button" src="<c:url value="/img/add_button.png"/>" alt="Add new product">
-    </a>
-</div>
+    <div class="container">
+        <h1>Product List</h1>
+        <br/><br/>
+        <c:if test="${not empty products}">
+            <table class="product_table">
+                <tr>
+                    <th>Name</th>
+                    <th>Brand</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th></th>
+                </tr>
+                <c:forEach  items="${products}" var ="product">
+                    <tr type="element" id="${product.id}">
+                        <td><a href="/product_detail/${product.id}" type="product_name">${product.name}</a></td>
+                        <td>${product.brand}</td>
+                        <td>${product.price}</td>
+                        <td>${product.quantity}</td>
+                        <td><img type="remove_button" src="<c:url value="/img/remove_button.png"/>"  element-id="${product.id}" alt="Remove product"></td>
+                    </tr>
+                </c:forEach>
+            </table>
+        </c:if>
+        <b class="text_empty_list" <c:if test="${not empty products}">style="display: none;"</c:if>>Product List is empty.</b>
+
+        <a href="/add_product" alt="Add new product">
+            <img type="add_button" src="<c:url value="/img/add_button.png"/>" alt="Add new product">
+        </a>
+    </div>
 </body>
 </html>

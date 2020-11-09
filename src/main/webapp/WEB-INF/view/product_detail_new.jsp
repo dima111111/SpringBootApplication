@@ -16,8 +16,8 @@
         <a href="/">Info</a>
         <nav>
             <ul>
-                <li><a href="<c:url value="/product_list"/>">Product List</a></li>
-                <li><a href="<c:url value="/search"/>">Search</a></li>
+                <li><a href="/product_list">Product List</a></li>
+                <li><a href="/search">Search</a></li>
             </ul>
         </nav>
     </div>

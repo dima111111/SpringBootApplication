@@ -8,10 +8,15 @@ jQuery(document).ready(function($){
                 url : '/products/' + productId + '/',
                 type: 'DELETE',
                 success : function(response) {
-                    $('#' + productId).remove();
+                    if ($("[type='element']").length === 1) {
+                        $(".product_table").remove();
+                        $(".text_empty_list").show()
+                    } else {
+                        $('#' + productId).remove();
+                    }
                 },
                 fail: function(xhr, textStatus, errorThrown){
-                    alert('request failed');
+                    alert('request to delete failed with status' + textStatus);
                 }
             });
         }

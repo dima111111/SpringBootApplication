@@ -1,8 +1,11 @@
-package org.example;
+package org.bmstu.model;
 
 import javax.persistence.*;
 import static javax.persistence.GenerationType.IDENTITY;
 
+/**
+ * Model of productEntity object
+ */
 @Entity
 public class productEntity {
     @Id
