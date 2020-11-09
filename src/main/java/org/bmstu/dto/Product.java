@@ -17,6 +17,9 @@ public class Product {
     private int price;
     private int quantity;
 
+    public Product() {
+    }
+
     /**
      * Product constructor by product link and other fields
      * @param link String url for product rest request
