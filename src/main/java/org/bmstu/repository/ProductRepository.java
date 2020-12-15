@@ -2,7 +2,7 @@ package org.bmstu.repository;
 
 import java.util.List;
 
-import org.bmstu.model.productEntity;
+import org.bmstu.model.ProductEntity;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -16,24 +16,24 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  * a restful "/products" exit point
  */
 @RepositoryRestResource(collectionResourceRel = "products", path = "products")
-public interface ProductRepository extends PagingAndSortingRepository<productEntity, Long> {
+public interface ProductRepository extends PagingAndSortingRepository<ProductEntity, Long> {
 
     /**
      * request method to get a list of productEntity objects by a given name
      * @param name string Product name
      * @return List<productEntity>
      */
-    List<productEntity> findByName(@Param("name") String name);
+    List<ProductEntity> findByName(@Param("name") String name);
     /**
      * request method to get a list of productEntity objects by a given brand
      * @param brand string Product brand
      * @return List<productEntity>
      */
-    List<productEntity> findByBrand(@Param("brand") String brand);
+    List<ProductEntity> findByBrand(@Param("brand") String brand);
     /**
      * request method to get a list of productEntity objects which quantity is less than a given parameter
      * @param quantity string Product brand
      * @return List<productEntity>
      */
-    List<productEntity> findByQuantityLessThan(@Param("quantity") int quantity);
+    List<ProductEntity> findByQuantityLessThan(@Param("quantity") int quantity);
 }

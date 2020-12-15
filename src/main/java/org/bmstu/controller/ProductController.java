@@ -20,10 +20,6 @@ import java.util.List;
  */
 @Controller
 public class ProductController {
-    /**
-     * Variable which store product list of type {@link Product}
-     */
-    private List <Product> productList = new ArrayList<>();
 
     private static final int  leftoversQuantity = 5;
 
@@ -34,8 +30,7 @@ public class ProductController {
      * @return List<Product>
      */
     public List <Product> getProductList(HttpServletRequest request, String restApiUrl) {
-        productList.clear();
-
+        List <Product> productList = new ArrayList<>();
         // making server request url and execute rest api GET request using RestTemplate.getForObject method
         String requestUrl = String.format("%s://%s:%d/" + restApiUrl ,request.getScheme(),  request.getServerName(), request.getServerPort());
         RestTemplate restTemplate = new RestTemplate();
@@ -67,7 +62,7 @@ public class ProductController {
      */
     @RequestMapping(value = {"/product_list"}, method = RequestMethod.GET)
     public String viewProductList(Model model, HttpServletRequest request) {
-        productList = getProductList(request, "products");
+        List <Product> productList = getProductList(request, "products");
         model.addAttribute("products", productList);
         return "product_list";
     }
@@ -80,7 +75,7 @@ public class ProductController {
      */
     @RequestMapping(value = {"/search"}, method = RequestMethod.GET)
     public String viewProductSearch(Model model, HttpServletRequest request) {
-        productList = getProductList(request, "products");
+        List <Product>  productList = getProductList(request, "products");
         model.addAttribute("products", productList);
         return "product_search";
     }
@@ -93,6 +88,7 @@ public class ProductController {
      */
     @RequestMapping(value = {"/search"}, method = RequestMethod.POST)
     public String viewProductSearchByFilter(Model model, HttpServletRequest request) {
+        List <Product> productList = new ArrayList<>();
         String nameFilter = request.getParameter("name");
         String brandFilter = request.getParameter("brand");
 

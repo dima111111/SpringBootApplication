@@ -4,10 +4,10 @@ import javax.persistence.*;
 import static javax.persistence.GenerationType.IDENTITY;
 
 /**
- * Model of productEntity object
+ * Model of ProductEntity object
  */
 @Entity
-public class productEntity {
+public class ProductEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
