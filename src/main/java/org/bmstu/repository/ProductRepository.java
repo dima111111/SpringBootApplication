@@ -36,4 +36,10 @@ public interface ProductRepository extends PagingAndSortingRepository<ProductEnt
      * @return List<productEntity>
      */
     List<ProductEntity> findByQuantityLessThan(@Param("quantity") int quantity);
+    /**
+     * request method to get a productEntity object by a given id
+     * @param id long Product id
+     * @return productEntity
+     */
+    ProductEntity findById(@Param("id") long id);
 }

@@ -1,13 +1,13 @@
 package org.bmstu.controller;
 
-import org.bmstu.dto.Product;
-import org.springframework.http.*;
+import org.bmstu.model.ProductEntity;
+import org.bmstu.repository.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -20,84 +20,39 @@ import java.util.*;
 @Controller
 public class ProductDetailController {
 
-    /**
-     * Method allows to get product by id making rest api request
-     * @param id long Product id
-     * @param request HttpServletRequest object of current request needed to make rest api request url
-     * @return Product object
-     */
-    public Product getProduct(long id, HttpServletRequest request) {
-        RestTemplate restTemplate = new RestTemplate();
-        Product product = new Product();
-        String requestUrl = String.format("%s://%s:%d/products/"  +  id, request.getScheme(),  request.getServerName(), request.getServerPort());
-        try {
-            product = restTemplate.getForObject(requestUrl, Product.class);
-            return product;
-        } catch (Exception e) {
-            return product;
-        }
-    }
+    @Autowired
+    ProductRepository productRepository;
 
     /**
-     * Creates Product object by POST request parameters
+     * Creates ProductEntity object by POST request parameters
      * @param request HttpServletRequest POST request
-     * @return Product
+     * @return ProductEntity
      */
-    private Product getProductByPostRequest(HttpServletRequest request) {
+    private ProductEntity getProductEntityByRequest(HttpServletRequest request) {
         String name = request.getParameter("name");
         String brand = request.getParameter("brand");
         int price = Integer.parseInt(request.getParameter("price"));
         int quantity = Integer.parseInt(request.getParameter("quantity"));
-        return new Product(name, brand, price, quantity);
+        return new ProductEntity(name, brand, price, quantity);
     }
 
     /**
-     * Creates HttpEntity by request parameters
-     * @param request HttpServletRequest POST request
-     * @return HttpEntity<Product>
-     */
-    private HttpEntity<Product> getHttpEntity(HttpServletRequest request) {
-        // set Headers
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-
-        // get Product object by request parameters
-        Product product = getProductByPostRequest(request);
-
-        // making HttpEntity<Product> entity by headers and product object
-        return new HttpEntity<>(product, headers);
-    }
-
-    /**
-     * Method allows to update product by id making rest api request
+     * Method allows to update product by id and request params
      * @param id long Product id
-     * @param request HttpServletRequest object of current request needed to make rest api request url
+     * @param request HttpServletRequest object of current request needed to get request params
      */
-    public void updateProductByRest(long id, HttpServletRequest request) {
-        // set URL
-        String url = String.format("%s://%s:%d/products/"  +  id, request.getScheme(),  request.getServerName(), request.getServerPort());
-        // execute rest api update product request using RestTemplate.put method
-        HttpEntity<Product> entity = getHttpEntity(request);
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.put(url, entity, id);
+    public void updateProductEntity(long id, HttpServletRequest request) {
+        ProductEntity productEntity = getProductEntityByRequest(request);
+        productEntity.setId(id);
+        productRepository.save(productEntity);
     }
-
     /**
-     * Method allows to add product by id making rest api request
-     * @param request HttpServletRequest object of current request needed
-     * to make rest api request url and get all POST parameters
-     * @return boolean value - was product successfully added
+     * Method allows to add product making rest api request
+     * @param request HttpServletRequest object of current request needed to get request params
      */
-    public boolean addProductByRest(HttpServletRequest request) {
-        // set Headers and URL
-        String url = String.format("%s://%s:%d/products/", request.getScheme(),  request.getServerName(), request.getServerPort());
-        // execute rest api update product request using RestTemplate.postForEntity method
-        HttpEntity<Product> entity = getHttpEntity(request);
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Product> response = restTemplate.postForEntity(url, entity, Product.class);
-
-        return response.getStatusCode() == HttpStatus.CREATED;
+    public void addProductEntity(HttpServletRequest request) {
+        ProductEntity productEntity = getProductEntityByRequest(request);
+        productRepository.save(productEntity);
     }
 
     /**
@@ -109,7 +64,7 @@ public class ProductDetailController {
      */
     @RequestMapping(value = {"/product_detail/{id}"}, method = RequestMethod.GET)
     public String viewProductDetail(Model model, @PathVariable("id") long id, HttpServletRequest request) {
-        Product product = getProduct(id, request);
+        ProductEntity product = productRepository.findById(id);
         model.addAttribute("product", product);
         return "product_detail";
     }
@@ -123,8 +78,8 @@ public class ProductDetailController {
      */
     @RequestMapping(value = {"/product_detail/{id}"}, method = RequestMethod.POST)
     public String updateProduct(Model model, @PathVariable("id") long id, HttpServletRequest request) {
-        updateProductByRest(id, request);
-        Product product = getProduct(id, request);
+        updateProductEntity(id, request);
+        ProductEntity product = productRepository.findById(id);
         model.addAttribute("product", product);
         return "product_detail";
     }
@@ -146,14 +101,12 @@ public class ProductDetailController {
      */
     @RequestMapping(value = {"/add_product"}, method = RequestMethod.POST)
     public String createProduct(Model model, HttpServletRequest request) {
-        boolean isSuccess = addProductByRest(request);
-        if (isSuccess) {
-            ProductController controller = new ProductController();
-            List<Product> productList = controller.getProductList(request, "products");
-            model.addAttribute("products", productList);
-            return "product_list";
-        } else {
-            return "product_detail_new";
+        addProductEntity(request);
+        List <ProductEntity> productList = new ArrayList<>();
+        for (ProductEntity productEntity: productRepository.findAll()){
+            productList.add(productEntity);
         }
+        model.addAttribute("products", productList);
+        return "product_list";
     }
 }

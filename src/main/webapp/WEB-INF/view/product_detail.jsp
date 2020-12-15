@@ -50,6 +50,7 @@
                         <th><input type="text" name="quantity" value="${product.quantity}"></th>
                     </tr>
                 </table>
+                <input type="hidden" name="id" value="${product.id}">
                 <input type="submit" value="Save">
             </form>
         </c:if>

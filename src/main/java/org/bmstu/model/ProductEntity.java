@@ -20,6 +20,19 @@ public class ProductEntity {
     @Column
     private int quantity;
 
+    public ProductEntity() {
+
+    }
+    public ProductEntity(String name, String brand, int price, int quantity) {
+        this.name = name;
+        this.brand = brand;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
+    public Long getId() {
+        return id;
+    }
     public String getName() {
         return name;
     }
@@ -33,6 +46,9 @@ public class ProductEntity {
         return quantity;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
     public void setName(String name) {
         this.name = name;
     }
