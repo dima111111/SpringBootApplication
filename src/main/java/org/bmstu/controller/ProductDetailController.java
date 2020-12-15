@@ -21,11 +21,6 @@ import java.util.*;
 public class ProductDetailController {
 
     /**
-     * Variable which store selected {@link Product}
-     */
-    private Product product;
-
-    /**
      * Method allows to get product by id making rest api request
      * @param id long Product id
      * @param request HttpServletRequest object of current request needed to make rest api request url
@@ -33,6 +28,7 @@ public class ProductDetailController {
      */
     public Product getProduct(long id, HttpServletRequest request) {
         RestTemplate restTemplate = new RestTemplate();
+        Product product = new Product();
         String requestUrl = String.format("%s://%s:%d/products/"  +  id, request.getScheme(),  request.getServerName(), request.getServerPort());
         try {
             product = restTemplate.getForObject(requestUrl, Product.class);
@@ -67,7 +63,7 @@ public class ProductDetailController {
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
         // get Product object by request parameters
-        product = getProductByPostRequest(request);
+        Product product = getProductByPostRequest(request);
 
         // making HttpEntity<Product> entity by headers and product object
         return new HttpEntity<>(product, headers);
@@ -113,7 +109,7 @@ public class ProductDetailController {
      */
     @RequestMapping(value = {"/product_detail/{id}"}, method = RequestMethod.GET)
     public String viewProductDetail(Model model, @PathVariable("id") long id, HttpServletRequest request) {
-        product = getProduct(id, request);
+        Product product = getProduct(id, request);
         model.addAttribute("product", product);
         return "product_detail";
     }
@@ -128,7 +124,7 @@ public class ProductDetailController {
     @RequestMapping(value = {"/product_detail/{id}"}, method = RequestMethod.POST)
     public String updateProduct(Model model, @PathVariable("id") long id, HttpServletRequest request) {
         updateProductByRest(id, request);
-        product = getProduct(id, request);
+        Product product = getProduct(id, request);
         model.addAttribute("product", product);
         return "product_detail";
     }
